@@ -215,17 +215,12 @@ def plot_missing_values(df: pd.DataFrame, missing: dict) -> str:
     low = len(missing.get("low_missing_cols", []))
     complete = len(missing.get("complete_columns", []))
     sizes = [high, med, low, complete]
-    labels = [f"High >50%\n({high})", f"Medium 10-50%\n({med})",
-               f"Low <10%\n({low})", f"Complete\n({complete})"]
-    explode = [0.05] * 4
+    labels = [f"High >50% ({high})", f"Medium 10-50% ({med})", f"Low <10% ({low})", f"Complete ({complete})"]
     wedge_colors = ["#ef5350", "#f9a825", "#43b89c", "#6c63ff"]
-    non_zero = [(s, l, c) for s, l, c in zip(sizes, labels, wedge_colors) if s > 0]
+    non_zero = [(s, lbl, c) for s, lbl, c in zip(sizes, labels, wedge_colors) if s > 0]
     if non_zero:
-        s, l, c = zip(*non_zero)
-        wedges, texts, autotexts = ax2.pie(
-            s, labels=l, colors=c, autopct="%1.0f%%",
-            startangle=90, textprops={"color": "#e0e0e0", "fontsize": 9},
-        )
+        nz_s, nz_l, nz_c = zip(*non_zero)
+        ax2.pie(nz_s, labels=nz_l, colors=nz_c, autopct="%1.0f%%", startangle=90, textprops={"color": "#e0e0e0", "fontsize": 9})
     ax2.set_title("Missing Severity Distribution", color="#e0e0e0")
 
     path = f"{OUTPUT_DIR}/02_missing_values.png"
